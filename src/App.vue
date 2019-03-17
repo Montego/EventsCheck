@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <Header></Header>
+    <div class="container">
     <router-view></router-view>
-    <hr>
+    </div>
   </div>
 </template>
 
 <script>
 import Header from "./components/layouts/Header";
-import Footer from "./components/layouts/Footer";
 export default {
   name: 'app',
   components: {
-    Footer, Header
+     Header
   },
   // data () {
   //   return {

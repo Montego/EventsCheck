@@ -3,7 +3,10 @@ import VueRouter from 'vue-router'
 import Main from "../components/pages/Main";
 import Profile from "../components/pages/Profile";
 import E404 from "../components/pages/E404";
-import UserList from "../components/pages/UserList";
+import Employers from "../components/pages/Employers";
+import Calendar from "../components/pages/Calendar";
+import Tabel from "../components/pages/Tabel";
+import Events from "../components/pages/Events";
 
 
 Vue.use(VueRouter);
@@ -19,13 +22,33 @@ const routes = [
     component: Main
   },
   {
-    path:'/user-list/:id',
-    component: UserList
+    name:'employers',
+    path:'/employers',
+    component: Employers
   },
+  {
+    name:'events',
+    path:'/events',
+    component: Events
+  },
+  {
+    name:'tabel',
+    path:'/tabel',
+    component: Tabel
+  },
+  // {
+  //   path:'/employers/:id',
+  //   component: Employers
+  // },
   {
     name:'profile',
     path:'/profile',
     component: Profile
+  },
+  {
+    name:'calendar',
+    path:'/calendar',
+    component: Calendar
   },
   {
     path:'*',

@@ -1,46 +1,106 @@
 <template>
     <div>
-      <!--<nav class="navbar navbar-light bg-light">-->
-        <!--<div>-->
-          <!---->
-        <!--<form class="form-inline">-->
-          <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-          <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-        <!--</form>-->
-        <!--</div>-->
-      <!--</nav>-->
-      <nav class="navbar fixed-top navbar-light bg-light navbar-light" style="background-color: lightblue">
-        <a class="navbar-brand" href="#">Fixed top</a>
-        <a class="navbar-brand" href="#">Hidden brand</a>
-          <!--<ul class="navbar-nav">-->
-            <!--<li class="nav-item active">-->
-              <!--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-            <!--</li>-->
-            <!--<li class="nav-item">-->
-              <!--<a class="nav-link" href="#">Link</a>-->
-            <!--</li>-->
-            <!--<li class="nav-item">-->
-              <!--<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
-            <!--</li>-->
-          <!--</ul>-->
-        <a class="fas fa-sign-out" href="#"></a>"
-        <button>Logout </button>
+      <nav class="navbar navbar-expand-sm ">
+      <ul class="navbar-nav justify-content-center">
+
+        <li class="nav-link main">
+          <router-link :to="{name: 'main'}" v-bind:title="message">
+            <a href="" class="fas fa-home main_icon" ></a>
+          </router-link>
+        </li>
+        <div class="vl"></div>
+
+
+        <li class="nav-link employers">
+          <!--<a href="" class="far fa-user"></a>-->
+          <router-link :to="{name: 'employers'}" v-bind:title="message">
+            <a href="" class="fas fa-users"></a>
+          </router-link>
+        </li>
+        <!--<div class="vl"></div>-->
+        <li class="nav-link events">
+          <router-link :to="{name: 'events'}" v-bind:title="message">
+          <a href="" class="fas fa-theater-masks"></a>
+          </router-link>
+        </li>
+        <!--<div class="vl"></div>-->
+        <li class="nav-link tabel">
+          <router-link :to="{name: 'tabel'}" v-bind:title="message">
+          <a href="" class="fas fa-user-clock"></a>
+          </router-link>
+        </li>
+
+        <li class="nav-link calendar">
+          <router-link :to="{name: 'calendar'}" v-bind:title="message">
+            <a href="" class="far fa-calendar-alt"></a>
+          </router-link>
+        </li>
+
+      </ul>
+
+      <!-- Right -->
+      <ul class="navbar-nav ml-auto">
+        <div class="vl"></div>
+        <li class="nav-item">
+          <a class="nav-link username">User</a>
+        </li>
+        <li class="nav-link">
+          <!--<a href="" class="nav-link">Logout</a>-->
+          <a href="" class="fas fa-sign-out-alt"></a>
+        </li>
+      </ul>
       </nav>
     </div>
-
 </template>
 
 <script>
     export default {
-        name: "Header"
+        name: "Header",
+        data: function () {
+        return {
+          message: 'fgdfg'
+        }
+      },
+      computed:{
+          // kindOfInfoAboutIconMenu{
+          //
+          // }
+      }
     }
 </script>
 
 <style scoped>
-  .nav-header {
-    padding: 30px 20px;
-    /*background-color: #007bff;*/
-    background-color: lightblue;
+  .nav-link {
+    margin-left: 100px;
+    font-size: 30px;
+    /*text-align: center;*/
+    text-shadow: 1px 1px 3px #666666,
+    -1px -1px 3px #FFFFFF;
+  }
+  .navbar {
     text-align: center;
+    /*background-color: gainsboro;*/
+    background-color: #efefef;
+  }
+
+  .vl {
+    border-left: 1px solid ghostwhite;
+  }
+  .nav-link.groups_link {
+    align-content: center;
+  }
+  a {
+    color: black;
+  }
+  .main {
+    margin-left: 0;
+    margin-right: 100px;
+
+  }
+  .username {
+    margin-left: 0;
+  }
+  .main_icon{
+    color: #5bc0de;
   }
 </style>
