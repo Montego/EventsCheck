@@ -84,7 +84,7 @@
             <v-icon color="teal">edit</v-icon>
           </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+            <v-icon color="red">delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -158,187 +158,6 @@
     methods: {
       initialize() {
         this.info = [
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-          {
-            person: 0,
-            date_of: 0,
-            overtime: 0,
-            lesstime: 0,
-            seakleave: 0,
-            time_off: 0,
-            vacaton: 0,
-          },
-
         ]
       },
 
@@ -369,7 +188,22 @@
         }
         this.close()
       }
-    }
+    },
+    // mutations: {
+    //   SET_NAME: (state, name) => {
+    //     state.name = name;
+    //   },
+    // },
+    //
+    // actions: {
+    //   SET_NAME: async (context, name) => {
+    //     let {data} = await Axios.post('http://myapiendpoint.com/api/name', {name: name});
+    //
+    //     if (data.status == 200) {
+    //       context.commit('SET_NAME', name);
+    //     }
+    //   },
+    // }
   }
 
 </script>

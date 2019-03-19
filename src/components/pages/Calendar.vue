@@ -1,5 +1,5 @@
 <template>
-    <div id="calendar" class="calendar">
+    <div id="calendar" class="calendar container">
       <calendar-view
         :show-date="showDate"
         class="theme-default holiday-us-traditional holiday-us-official">

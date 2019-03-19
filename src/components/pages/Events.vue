@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-flex row>
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="dialog" max-width="800px">
 
         <v-btn slot="activator" color="primary" dark class="mb-2">New event</v-btn>
         <v-card>
@@ -12,14 +12,23 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md2>
                   <v-text-field v-model="editedItem.date_of" label="Date"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
+                <v-flex xs12 sm6 md2>
                   <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.full_info" label="Full information"></v-text-field>
+                <v-divider></v-divider>
+                <v-flex xs12 sm12 md8>
+                  <!--<v-text-field v-model="editedItem.full_info" label="Full information"></v-text-field>-->
+                  <v-textarea
+                    v-model="editedItem.full_info"
+                    label="Full information"
+                    counter
+                    maxlength="360"
+                    full-width
+                    single-line
+                  ></v-textarea>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -50,7 +59,7 @@
       ></v-text-field>
     </v-flex>
 
-    <v-footer class="tabel_name">Tabel of events</v-footer>
+    <v-footer class="tabel_name">Events</v-footer>
 
     <v-data-table
       :headers="headers"
@@ -89,6 +98,9 @@
 </template>
 
 <script>
+  import {APIService} from '../plugins/APIService';
+  const apiService = new APIService();
+
   export default {
     data: () => ({
       search: '',
@@ -131,13 +143,13 @@
 
     methods: {
       initialize() {
-        // this.info = [
-        //   {
-        //     date_of: 0,
-        //     name: 0,
-        //     full_info: 0,
-        //   },
-        // ]
+        this.info = [
+          {
+            date_of: 0,
+            name: 0,
+            full_info: 0,
+          },
+        ]
       },
 
       editItem(item) {
@@ -165,9 +177,36 @@
         } else {
           this.info.push(this.editedItem)
         }
-        this.close()
+        this.close();
+
+        createEvents();
+        // apiService.createEvents().then((data) => {
+        //   this.info.date_of = data.date_of;
+        //   this.info.name= data.name;
+        //   this.info.full_info= data.full_info;
+        // });
       }
-    }
+    },
+    mutations: {
+
+    },
+
+    actions: {
+      getEvents(){
+        apiService.getEvents().then((data) => {
+
+          this.info = data.info;
+
+        });
+      },
+      createEvents(){
+        apiService.createEvents().then((data) => {
+          props.item.date_of = data.date;
+          props.item.name= data.name;
+          props.item.full_info= data.full_info;
+        });
+      },
+    },
   }
 
 </script>
