@@ -7,6 +7,7 @@ import Employers from "../components/pages/Employers";
 import Calendar from "../components/pages/Calendar";
 import Tabel from "../components/pages/Tabel";
 import Events from "../components/pages/Events";
+import TestREST from "../components/pages/TestREST";
 
 
 Vue.use(VueRouter);
@@ -49,6 +50,10 @@ const routes = [
     name:'calendar',
     path:'/calendar',
     component: Calendar
+  },
+  {
+    path:'/testREST',
+    component: TestREST
   },
   {
     path:'*',

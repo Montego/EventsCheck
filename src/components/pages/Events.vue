@@ -98,8 +98,8 @@
 </template>
 
 <script>
-  import {APIService} from '../plugins/APIService';
-  const apiService = new APIService();
+  import {AXIOS} from '../plugins/APIService';
+
 
   export default {
     data: () => ({
@@ -142,7 +142,7 @@
     },
 
     methods: {
-      initialize() {
+       initialize(){
         this.info = [
           {
             date_of: 0,
@@ -179,33 +179,13 @@
         }
         this.close();
 
-        createEvents();
+
         // apiService.createEvents().then((data) => {
         //   this.info.date_of = data.date_of;
         //   this.info.name= data.name;
         //   this.info.full_info= data.full_info;
         // });
       }
-    },
-    mutations: {
-
-    },
-
-    actions: {
-      getEvents(){
-        apiService.getEvents().then((data) => {
-
-          this.info = data.info;
-
-        });
-      },
-      createEvents(){
-        apiService.createEvents().then((data) => {
-          props.item.date_of = data.date;
-          props.item.name= data.name;
-          props.item.full_info= data.full_info;
-        });
-      },
     },
   }
 
