@@ -112,6 +112,8 @@
         { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
       info: [],
+      response:[],
+      errors:[],
       editedIndex: -1,
       editedItem: {
         date_of: '',
@@ -178,13 +180,16 @@
           this.info.push(this.editedItem)
         }
         this.close();
+        // Http post
+          AXIOS.post(`/events`,this.editedItem)
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.editedItem = response.data
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
 
-
-        // apiService.createEvents().then((data) => {
-        //   this.info.date_of = data.date_of;
-        //   this.info.name= data.name;
-        //   this.info.full_info= data.full_info;
-        // });
       }
     },
   }

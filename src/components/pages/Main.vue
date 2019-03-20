@@ -2,7 +2,8 @@
   <div>
     <v-flex row>
 
-      <span class="title"> По состоянию на: {{}}</span>
+      <!--<span class="title"> По состоянию на: {{}}</span>-->
+      <span class="title" @click="callRestService()"> По состоянию на: {{ response }}</span>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -40,16 +41,18 @@
         Your search for "{{ search }}" found no results.
       </v-alert>
 
-      <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
+      <!--<template slot="no-data">-->
+        <!--<v-btn color="primary" @click="initialize">Reset</v-btn>-->
+      <!--</template>-->
     </v-data-table>
   </div>
 </template>
 
 <script>
+  import  {AXIOS} from "../plugins/APIService.js"
   export default {
     data: () => ({
+      response:[],
       search: '',
       dialog: false,
       headers: [
@@ -59,6 +62,7 @@
       ],
       info: [],
       editedIndex: -1,
+
     }),
 
     watch: {
@@ -66,7 +70,18 @@
         val || this.close()
       }
     },
-
+    methods: {
+      callRestService () {
+        AXIOS.get(`/testREST/test`)
+          .then(response => {
+            // JSON responses are automatically parsed.
+            this.response = response.data
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      }
+    },
   }
 
 </script>

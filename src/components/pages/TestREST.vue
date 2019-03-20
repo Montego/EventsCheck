@@ -59,7 +59,7 @@
           })
       },
       retrieveUser () {
-        AXIOS.get(`/testREST/` + this.user.id)
+        AXIOS.get(`api/testREST/` + this.user.id)
           .then(response => {
             // JSON responses are automatically parsed.
             this.retrievedUser = response.data
