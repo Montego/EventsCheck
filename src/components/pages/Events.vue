@@ -41,7 +41,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
+      <!--Переделать эту дичь-->
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -79,7 +79,7 @@
             <v-icon color="teal">edit</v-icon>
           </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+            <v-icon color="red">delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -146,11 +146,13 @@
     methods: {
        initialize(){
         this.info = [
-          {
-            date_of: 0,
-            name: 0,
-            full_info: 0,
-          },
+          AXIOS.get(`/events`)
+            .then(response => {
+              this.info = response.data
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
         ]
       },
 
@@ -162,7 +164,16 @@
 
       deleteItem(item) {
         const index = this.info.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.info.splice(index, 1)
+        confirm('Are you sure you want to delete this item?') && this.info.splice(index, 1) &&
+
+        AXIOS.delete('/events', item)
+          .then(response => {
+
+            this.info = response.data;
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
       },
 
       close() {
