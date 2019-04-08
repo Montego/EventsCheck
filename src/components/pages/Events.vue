@@ -3,32 +3,32 @@
     <v-flex row>
       <v-dialog v-model="dialog" max-width="800px">
 
-        <v-btn slot="activator" color="primary" dark class="mb-2">New event</v-btn>
+        <v-btn slot="activator" color="#5bc0de" dark class="mb-2">New event</v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">New info</span>
+            <span class="headline">{{ formTitle }}</span>
           </v-card-title>
 
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md2>
-                  <v-text-field v-model="editedItem.date_of" label="Date"></v-text-field>
+                <v-flex xs12 sm6 md3>
+                  <v-text-field v-model="editedItem.date_of" label="Date" type="date"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md2>
+                <v-flex xs12 sm6 md3>
                   <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                 </v-flex>
                 <v-divider></v-divider>
                 <v-flex xs12 sm12 md8>
-                  <!--<v-text-field v-model="editedItem.full_info" label="Full information"></v-text-field>-->
-                  <v-textarea
-                    v-model="editedItem.full_info"
-                    label="Full information"
-                    counter
-                    maxlength="360"
-                    full-width
-                    single-line
-                  ></v-textarea>
+                  <v-text-field v-model="editedItem.full_info" label="Full information" maxlength="77"></v-text-field>
+                  <!--<v-textarea-->
+                    <!--v-model="editedItem.full_info"-->
+                    <!--label="Full information"-->
+                    <!--counter-->
+                    <!--maxlength="360"-->
+                    <!--full-width-->
+                    <!--single-line-->
+                  <!--&gt;</v-textarea>-->
                 </v-flex>
               </v-layout>
             </v-container>
@@ -76,7 +76,7 @@
         <td class="text-xs-center">{{ props.item.full_info }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
+            <v-icon color="#5bc0de">edit</v-icon>
           </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
             <v-icon color="red">delete</v-icon>
@@ -89,7 +89,6 @@
       </v-alert>
 
 
-
       <template slot="no-data">
         <v-btn color="primary" @click="initialize">Reset</v-btn>
       </template>
@@ -99,7 +98,6 @@
 
 <script>
   import {AXIOS} from '../plugins/APIService';
-
 
   export default {
     data: () => ({
@@ -120,16 +118,16 @@
         name: '',
         full_info: '',
       },
-      defaultItem: {
-        date_of: '',
-        name: '',
-        full_info: '',
-      }
+      // defaultItem: {
+      //   date_of: '',
+      //   name: '',
+      //   full_info: '',
+      // }
     }),
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'New event' : 'Edit event'
       }
     },
 
@@ -163,17 +161,20 @@
       },
 
       deleteItem(item) {
-        const index = this.info.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.info.splice(index, 1) &&
-
-        AXIOS.delete('/events', item)
-          .then(response => {
-
-            this.info = response.data;
-          })
+        const index = this.info.indexOf(item);
+        confirm('Are you sure you want to delete this item?') && AXIOS.delete('events/' + index,{
+        params:
+        {
+          id:index
+        }
+        }).then(response => {
+            this.info.splice(index, 1);
+        })
           .catch(e => {
             this.errors.push(e)
-          })
+          });
+        // this.info.splice(index, 1);
+
       },
 
       close() {

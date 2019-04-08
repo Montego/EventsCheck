@@ -3,7 +3,7 @@
     <v-flex row>
 
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New tabel info</v-btn>
+      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">New tabel info</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">New info</span>
@@ -13,10 +13,10 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.person" label="Person"></v-text-field>
+                <v-text-field v-model="editedItem.person" :items="persons" label="Person"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.date_of" label="Date"></v-text-field>
+                <v-text-field v-model="editedItem.date_of" label="Date" type="date"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.overtime" label="Overtime"></v-text-field>
@@ -103,6 +103,7 @@
 </template>
 
 <script>
+  import {AXIOS} from '../plugins/APIService';
   export default {
     data: () => ({
       search: '',
@@ -118,6 +119,8 @@
         { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
       info: [],
+      persons: [],
+      errors:[],
       editedIndex: -1,
       editedItem: {
         person: '',
@@ -141,7 +144,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'New tabel info' : 'Edit tabel info'
       }
     },
 
@@ -158,6 +161,13 @@
     methods: {
       initialize() {
         this.info = [
+          AXIOS.get(`/employers`)
+            .then(response => {
+              this.employers = response.data
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
         ]
       },
 
@@ -169,7 +179,17 @@
 
       deleteItem(item) {
         const index = this.info.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.info.splice(index, 1)
+        confirm('Are you sure you want to delete this item?') && AXIOS.delete('events/' + index,{
+          params:
+            {
+              id:this.info.id
+            }
+        }).then(response => {
+          this.info.splice(index, 1);
+        })
+          .catch(e => {
+            this.errors.push(e)
+          });
       },
 
       close() {
@@ -187,23 +207,16 @@
           this.info.push(this.editedItem)
         }
         this.close()
+        AXIOS.post(`/tabel`,this.editedItem)
+          .then(response => {
+            // JSON responses are automatically parsed.
+            this.editedItem = response.data
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
       }
     },
-    // mutations: {
-    //   SET_NAME: (state, name) => {
-    //     state.name = name;
-    //   },
-    // },
-    //
-    // actions: {
-    //   SET_NAME: async (context, name) => {
-    //     let {data} = await Axios.post('http://myapiendpoint.com/api/name', {name: name});
-    //
-    //     if (data.status == 200) {
-    //       context.commit('SET_NAME', name);
-    //     }
-    //   },
-    // }
   }
 
 </script>
