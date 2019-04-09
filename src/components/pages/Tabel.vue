@@ -25,7 +25,7 @@
                 <v-text-field v-model="editedItem.lesstime" label="Lesstime"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.seakleave" label="Seak leave"></v-text-field>
+                <v-text-field v-model="editedItem.seakleave" label="Seakleave"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.time_off" label="Time off"></v-text-field>
@@ -44,6 +44,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+      {{editedItem}}
 
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -161,9 +162,9 @@
     methods: {
       initialize() {
         this.info = [
-          AXIOS.get(`/employers`)
+          AXIOS.get(`/tabel`)
             .then(response => {
-              this.employers = response.data
+              this.info = response.data
             })
             .catch(e => {
               this.errors.push(e)
@@ -178,11 +179,13 @@
       },
 
       deleteItem(item) {
-        const index = this.info.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && AXIOS.delete('events/' + index,{
+        const index = this.info.indexOf(item);
+        const idString = this.info[index].id;
+        const id = parseInt(idString,10);
+        confirm('Are you sure you want to delete this item?') && AXIOS.delete('tabel/' + id,{
           params:
             {
-              id:this.info.id
+              id:id
             }
         }).then(response => {
           this.info.splice(index, 1);
@@ -204,17 +207,17 @@
         if (this.editedIndex > -1) {
           Object.assign(this.info[this.editedIndex], this.editedItem)
         } else {
-          this.info.push(this.editedItem)
+          AXIOS.post(`/tabel`,this.editedItem)
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.info.push(response.data)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
         }
         this.close()
-        AXIOS.post(`/tabel`,this.editedItem)
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.editedItem = response.data
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
+
       }
     },
   }

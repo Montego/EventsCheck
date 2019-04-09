@@ -11,13 +11,13 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.lastname" label="Last name"></v-text-field>
+                <v-text-field v-model="editedItem.lastname" label="Last name" type="string"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.firstname" label="First name"></v-text-field>
+                <v-text-field v-model="editedItem.firstname" label="First name" type="string"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.patronic" label="Patronic"></v-text-field>
+                <v-text-field v-model="editedItem.patronic" label="Patronic" type="string"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.birthday" label="Birthday" type="date"></v-text-field>
@@ -34,10 +34,11 @@
       </v-card>
 
     </v-dialog>
+    {{editedItem}}
+
     <v-data-table
       :headers="headers"
       :items="employers"
-
       hide-actions
       class="elevation-1 text-xs-center"
     >
@@ -85,6 +86,12 @@
         patronic: '',
         birthday: ''
       },
+      defaultItem: {
+        lastname: '',
+        firstname: '',
+        patronic: '',
+        birthday: ''
+      }
 
     }),
 
@@ -104,6 +111,7 @@
       this.initialize()
     },
 
+
     methods: {
       initialize () {
         this.employers = [
@@ -115,15 +123,6 @@
               this.errors.push(e)
             })
         ]
-        // this.employers = [
-          // {
-          //   lastname: '',
-          //   firstname: '',
-          //   patronic: '',
-          //   birthday: '',
-          // },
-        // ]
-
       },
 
       editItem (item) {
@@ -134,10 +133,12 @@
 
       deleteItem (item) {
         const index = this.employers.indexOf(item);
-        confirm('Are you sure you want to delete this item?') && AXIOS.delete('employers/' + index,{
+        const idString = this.employers[index].id;
+        const id = parseInt(idString,10);
+        confirm('Are you sure you want to delete this item?') && AXIOS.delete('employers/' + id,{
           params:
             {
-              id:this.item.id
+              id:id
             }
         }).then(response => {
           this.employers.splice(index, 1);
@@ -147,30 +148,29 @@
           });
       },
 
-      close () {
+      close() {
         this.dialog = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
       },
-
+// какое-то говнище в save/пофиксить
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.employers[this.editedIndex], this.editedItem)
         } else {
-          this.employers.push(this.editedItem)
-
+          // this.employers.push(this.editedItem)
+          AXIOS.post(`/employers`,this.editedItem)
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.employers.push(response.data)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
         }
         this.close();
-        AXIOS.post(`/employers`,this.editedItem)
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.editedItem = response.data
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
       }
     }
   }

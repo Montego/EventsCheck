@@ -41,6 +41,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      {{editedItem}}
       <!--Переделать эту дичь-->
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -118,11 +119,11 @@
         name: '',
         full_info: '',
       },
-      // defaultItem: {
-      //   date_of: '',
-      //   name: '',
-      //   full_info: '',
-      // }
+      defaultItem: {
+        date_of: '',
+        name: '',
+        full_info: '',
+      }
     }),
 
     computed: {
@@ -162,11 +163,13 @@
 
       deleteItem(item) {
         const index = this.info.indexOf(item);
-        confirm('Are you sure you want to delete this item?') && AXIOS.delete('events/' + index,{
-        params:
-        {
-          id:index
-        }
+        const idString = this.info[index].id;
+        const id = parseInt(idString,10);
+        confirm('Are you sure you want to delete this item?') && AXIOS.delete('events/' + id,{
+          params:
+            {
+              id:id
+            }
         }).then(response => {
             this.info.splice(index, 1);
         })
@@ -189,19 +192,16 @@
         if (this.editedIndex > -1) {
           Object.assign(this.info[this.editedIndex], this.editedItem)
         } else {
-          this.info.push(this.editedItem)
-        }
-        this.close();
-        // Http post
           AXIOS.post(`/events`,this.editedItem)
             .then(response => {
               // JSON responses are automatically parsed.
-              this.editedItem = response.data
+              this.info.push(response.data)
             })
             .catch(e => {
               this.errors.push(e)
             })
-
+        }
+        this.close();
       }
     },
   }
