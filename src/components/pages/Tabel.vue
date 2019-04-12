@@ -3,7 +3,7 @@
     <v-flex row>
 
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">New tabel info</v-btn>
+      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Новая информация для табеля</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">New info</span>
@@ -11,41 +11,50 @@
 
         <v-card-text>
           <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.person" :items="persons" label="Person"></v-text-field>
+            <v-layout wrap align-center>
+              <v-flex xs12 sm6 d-flex>
+                <!--<v-text-field v-model="editedItem.person" :items="persons" label="Работник"></v-text-field>-->
+                <!--<v-select-->
+                  <!--:items="persons"-->
+                  <!--label="Person"-->
+                <!--&gt;</v-select>-->
+                <cool-select
+                  v-model="selected"
+                  :items="persons"
+                />
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.date_of" label="Date" type="date"></v-text-field>
+                <v-text-field v-model="editedItem.date_of" label="Дата" type="date"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.overtime" label="Overtime"></v-text-field>
+                <v-text-field v-model="editedItem.overtime" label="Переработки"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.lesstime" label="Lesstime"></v-text-field>
+                <v-text-field v-model="editedItem.lesstime" label="Недоработки"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.seakleave" label="Seakleave"></v-text-field>
+                <v-text-field v-model="editedItem.seakleave" label="Больничный"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.time_off" label="Time off"></v-text-field>
+                <v-text-field v-model="editedItem.time_off" label="Отгул"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.vacation" label="Vacation"></v-text-field>
+                <v-text-field v-model="editedItem.vacation" label="Отпуск"></v-text-field>
               </v-flex>
+
             </v-layout>
           </v-container>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="save">Сохранить</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
       {{editedItem}}
-
+    {{persons}}
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -105,22 +114,25 @@
 
 <script>
   import {AXIOS} from '../plugins/APIService';
+  import { CoolSelect } from 'vue-cool-select';
   export default {
+    components: { CoolSelect },
     data: () => ({
       search: '',
       dialog: false,
       headers: [
-        { text: 'Person', value: 'person', align: 'center' },
-        { text: 'Date', value: 'date_of', align: 'center' },
-        { text: 'Overtime', value: 'overtime', align: 'center' },
-        { text: 'Lesstime', value: 'lesstime', align: 'center' },
-        { text: 'Seak leave', value: 'seakleave', align: 'center' },
-        { text: 'Time off', value: 'time_off', align: 'center' },
-        { text: 'Vacation', value: 'vacation', align: 'center' },
-        { text: 'Actions', value: 'name', sortable: false, align: 'center' }
+        { text: 'Работник', value: 'person', align: 'center' },
+        { text: 'Дата', value: 'date_of', align: 'center' },
+        { text: 'Переработки', value: 'overtime', align: 'center' },
+        { text: 'Недоработки', value: 'lesstime', align: 'center' },
+        { text: 'Больничный', value: 'seakleave', align: 'center' },
+        { text: 'Отгул', value: 'time_off', align: 'center' },
+        { text: 'Отпуск', value: 'vacation', align: 'center' },
+        { text: 'Действия', value: 'name', sortable: false, align: 'center' }
       ],
       info: [],
       persons: [],
+      selected:null,
       errors:[],
       editedIndex: -1,
       editedItem: {
@@ -161,6 +173,15 @@
 
     methods: {
       initialize() {
+        this.persons = [
+          AXIOS.get(`/employers/lastname`)
+            .then(response => {
+              this.persons = response.data
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        ],
         this.info = [
           AXIOS.get(`/tabel`)
             .then(response => {

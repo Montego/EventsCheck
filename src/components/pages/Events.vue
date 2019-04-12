@@ -3,7 +3,7 @@
     <v-flex row>
       <v-dialog v-model="dialog" max-width="800px">
 
-        <v-btn slot="activator" color="#5bc0de" dark class="mb-2">New event</v-btn>
+        <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Новое событие</v-btn>
         <v-card>
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
@@ -13,22 +13,22 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md3>
-                  <v-text-field v-model="editedItem.date_of" label="Date" type="date"></v-text-field>
+                  <v-text-field v-model="editedItem.date_of" label="Дата события" type="date"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md3>
-                  <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                  <v-text-field v-model="editedItem.name" label="Название"></v-text-field>
                 </v-flex>
-                <v-divider></v-divider>
+                <!--<v-divider></v-divider>-->
                 <v-flex xs12 sm12 md8>
-                  <v-text-field v-model="editedItem.full_info" label="Full information" maxlength="77"></v-text-field>
-                  <!--<v-textarea-->
-                    <!--v-model="editedItem.full_info"-->
-                    <!--label="Full information"-->
-                    <!--counter-->
-                    <!--maxlength="360"-->
-                    <!--full-width-->
-                    <!--single-line-->
-                  <!--&gt;</v-textarea>-->
+                  <!--<v-text-field v-model="editedItem.full_info" label="Полная информация" maxlength="77"></v-text-field>-->
+                  <v-textarea
+                    v-model="editedItem.full_info"
+                    label="Full information"
+                    counter
+                    maxlength="360"
+                    full-width
+                    single-line
+                  ></v-textarea>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -36,8 +36,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="save">Сохранить</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -60,7 +60,7 @@
       ></v-text-field>
     </v-flex>
 
-    <v-footer class="tabel_name">Events</v-footer>
+    <v-footer class="tabel_name">События</v-footer>
 
     <v-data-table
       :headers="headers"
@@ -105,10 +105,10 @@
       search: '',
       dialog: false,
       headers: [
-        { text: 'Date', value: 'date_of', align: 'center' },
-        { text: 'Name', value: 'name', align: 'center' },
-        { text: 'Full Information', value: 'full_info', align: 'center' },
-        { text: 'Actions', value: 'name', sortable: false, align: 'center' }
+        { text: 'Дата события', value: 'date_of', align: 'center' },
+        { text: 'Название', value: 'name', align: 'center' },
+        { text: 'Полная информация', value: 'full_info', align: 'center' },
+        { text: 'Действия', value: 'name', sortable: false, align: 'center' }
       ],
       info: [],
       response:[],

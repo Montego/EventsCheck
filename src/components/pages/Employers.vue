@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Add new employer</v-btn>
+      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Новый работник</v-btn>
 
       <v-card>
         <v-card-title>
@@ -11,16 +11,16 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.lastname" label="Last name" type="string"></v-text-field>
+                <v-text-field v-model="editedItem.lastname" label="Фамилия" type="string"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.firstname" label="First name" type="string"></v-text-field>
+                <v-text-field v-model="editedItem.firstname" label="Имя" type="string"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.patronic" label="Patronic" type="string"></v-text-field>
+                <v-text-field v-model="editedItem.patronic" label="Отчество" type="string"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.birthday" label="Birthday" type="date"></v-text-field>
+                <v-text-field v-model="editedItem.birthday" label="Дата рождения" type="date"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -28,8 +28,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="close">Закрыть</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="save">Сохранить</v-btn>
         </v-card-actions>
       </v-card>
 
@@ -68,12 +68,13 @@
 
   export default {
     data: () => ({
+      error: false,
       dialog: false,
       headers: [
-        { text: 'Last name', value: 'lastтame', align: 'center' },
-        { text: 'First name', value: 'firstтame', align: 'center' },
-        { text: 'Patronic', value: 'patronic', align: 'center' },
-        { text: 'Birthday', value: 'birthday', align: 'center' },
+        { text: 'Фамилия', value: 'lastтame', align: 'center' },
+        { text: 'Имя', value: 'firstтame', align: 'center' },
+        { text: 'Отчество', value: 'patronic', align: 'center' },
+        { text: 'Дата рождения', value: 'birthday', align: 'center' },
         { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
       employers: [],
@@ -109,6 +110,7 @@
 
     created () {
       this.initialize()
+
     },
 
 
@@ -126,9 +128,24 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.employers.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        const index = this.employers.indexOf(item);
+        const idString = this.employers[index].id;
+        const id = parseInt(idString,10);
+        AXIOS.put('employers/' + id,{
+          params:
+            {
+              id:id
+            }
+        }).then(response => {
+          this.employers[index].push(response.data);
+          // this.editedIndex = this.employers.indexOf(item)
+          // this.editedItem = Object.assign({}, item)
+          this.dialog = true
+        })
+          .catch(e => {
+            this.errors.push(e)
+          });
+
       },
 
       deleteItem (item) {
@@ -155,19 +172,35 @@
           this.editedIndex = -1
         }, 300)
       },
-// какое-то говнище в save/пофиксить
+
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.employers[this.editedIndex], this.editedItem)
         } else {
           // this.employers.push(this.editedItem)
-          AXIOS.post(`/employers`,this.editedItem)
+
+          // AXIOS.post(`/employers`, this.editedItem)
+          //   .then(response => {
+          //   this.employers.push(this.editedItem)
+          // })
+          //   .catch(e => {
+          //     console.log(e)
+          //     this.errors.push(e);
+          //   })
+
+          AXIOS.post(`/employers`, this.editedItem)
             .then(response => {
+
               // JSON responses are automatically parsed.
-              this.employers.push(response.data)
+              this.employers.push(response.data);
+              console.log(response.data);
+              console.log('test');
+              console.log(response)
             })
             .catch(e => {
-              this.errors.push(e)
+              this.errors.push(e);
+              this.error=true;
+              console.log(e)
             })
         }
         this.close();
