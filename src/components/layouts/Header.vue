@@ -5,7 +5,13 @@
 
         <li class="nav-link main">
           <router-link :to="{name: 'main'}" v-bind:title="message">
-            <a href="" class="fas fa-home main_icon" ></a>
+            <!--<a href="" class="fas fa-home main_icon" ></a>-->
+            <template v-if="'main'.indexOf($route.name)>-1">
+              <a href="" class="fas fa-home main_icon"></a>
+            </template>
+            <template v-else>
+              <a href="" class="fas fa-home"></a>
+            </template>
           </router-link>
         </li>
         <div class="vl"></div>
@@ -14,25 +20,49 @@
         <li class="nav-link employers">
           <!--<a href="" class="far fa-user"></a>-->
           <router-link :to="{name: 'employers'}" v-bind:title="message">
-            <a href="" class="fas fa-users"></a>
+            <!--<a href="" class="fas fa-users"></a>-->
+            <template v-if="'employers'.indexOf($route.name)>-1">
+              <a href="" class="fas fa-user-plus employer_icon"></a>
+            </template>
+            <template v-else>
+              <a href="" class="fas fa-user-plus"></a>
+            </template>
           </router-link>
         </li>
         <!--<div class="vl"></div>-->
         <li class="nav-link events">
           <router-link :to="{name: 'events'}" v-bind:title="message">
-          <a href="" class="fas fa-theater-masks"></a>
+          <!--<a href="" class="fas fa-theater-masks"></a>-->
+            <template v-if="'events'.indexOf($route.name)>-1">
+              <a href="" class="fas fa-theater-masks events_icon"></a>
+            </template>
+            <template v-else>
+              <a href="" class="fas fa-theater-masks"></a>
+            </template>
           </router-link>
         </li>
         <!--<div class="vl"></div>-->
         <li class="nav-link tabel">
           <router-link :to="{name: 'tabel'}" v-bind:title="message">
-          <a href="" class="fas fa-user-clock"></a>
+          <!--<a href="" class="fas fa-user-clock"></a>-->
+            <template v-if="'tabel'.indexOf($route.name)>-1">
+              <a href="" class="fas fa-user-clock tabel_icon"></a>
+            </template>
+            <template v-else>
+              <a href="" class="fas fa-user-clock"></a>
+            </template>
           </router-link>
         </li>
 
         <li class="nav-link calendar">
           <router-link :to="{name: 'calendar'}" v-bind:title="message">
-            <a href="" class="far fa-calendar-alt"></a>
+            <!--<a href="" class="far fa-calendar-alt"></a>-->
+            <template v-if="'calendar'.indexOf($route.name)>-1">
+              <a href="" class="far fa-calendar-alt calendar_icon"></a>
+            </template>
+            <template v-else>
+              <a href="" class="far fa-calendar-alt"></a>
+            </template>
           </router-link>
         </li>
 
@@ -58,7 +88,7 @@
         name: "Header",
         data: function () {
         return {
-          message: 'fgdfg'
+          message: 'надо доделать эту фигню'
         }
       },
       computed:{
@@ -82,7 +112,21 @@
     /*background-color: gainsboro;*/
     background-color: #efefef;
   }
-
+  .main_icon{
+  color: #5bc0de;
+  }
+  .employer_icon {
+    color: #5bc0de;
+  }
+  .events_icon {
+    color: #5bc0de;
+  }
+  .tabel_icon {
+    color: #5bc0de;
+  }
+  .calendar_icon {
+    color: #5bc0de;
+  }
   .vl {
     border-left: 1px solid ghostwhite;
   }
@@ -91,6 +135,7 @@
   }
   a {
     color: black;
+    text-decoration: none;
   }
   .main {
     margin-left: 0;
@@ -100,7 +145,5 @@
   .username {
     margin-left: 0;
   }
-  .main_icon{
-    color: #5bc0de;
-  }
+
 </style>

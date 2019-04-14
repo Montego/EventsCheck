@@ -68,9 +68,9 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-      {{editedItem}}
-      <br>
-    {{employers}}
+      <!--{{editedItem}}-->
+      <!--<br>-->
+    <!--{{employers}}-->
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -87,7 +87,7 @@
         hide-details
       ></v-text-field>
     </v-flex>
-
+    <v-footer class="tabel_name">Табель</v-footer>
     <v-data-table
       :headers="headers"
       :items="info"
@@ -106,9 +106,9 @@
         <td class="text-xs-center">{{ props.item.time_off }}</td>
         <td class="text-xs-center">{{ props.item.vacation }}</td>
         <td class="justify-center layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
-          </v-btn>
+          <!--<v-btn icon class="mx-0" @click="editItem(props.item)">-->
+            <!--<v-icon color="teal">edit</v-icon>-->
+          <!--</v-btn>-->
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
             <v-icon color="red">delete</v-icon>
           </v-btn>
@@ -261,6 +261,17 @@
       save() {
         if (this.editedIndex > -1) {
           Object.assign(this.info[this.editedIndex], this.editedItem)
+          const idString = this.info[this.editedIndex].id;
+          const id = parseInt(idString,10);
+          AXIOS.put(`/tabel/` + id,this.editedItem)
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.info.push(response.data)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+
         } else {
           AXIOS.post(`/tabel`,this.editedItem)
             .then(response => {
@@ -282,6 +293,10 @@
 <style scoped>
   .search_place {
     padding-bottom: 20px;
+  }
+  .tabel_name {
+    font-size: 30px;
+    /*font-family: ;*/
   }
   .row {
     margin-left: 0;

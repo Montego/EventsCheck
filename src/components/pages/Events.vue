@@ -76,9 +76,9 @@
         <td class="text-xs-center">{{ props.item.name }}</td>
         <td class="text-xs-center">{{ props.item.full_info }}</td>
         <td class="justify-center layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="#5bc0de">edit</v-icon>
-          </v-btn>
+          <!--<v-btn icon class="mx-0" @click="editItem(props.item)">-->
+            <!--<v-icon color="#5bc0de">edit</v-icon>-->
+          <!--</v-btn>-->
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
             <v-icon color="red">delete</v-icon>
           </v-btn>
