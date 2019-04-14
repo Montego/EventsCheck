@@ -12,16 +12,31 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap align-center>
-              <v-flex xs12 sm6 d-flex>
-                <!--<v-text-field v-model="editedItem.person" :items="persons" label="Работник"></v-text-field>-->
+              <v-flex xs12 sm12 md12>
+                <!--<v-text-field v-model="editedItem.employer" :items="employers" label="Работник"></v-text-field>-->
                 <!--<v-select-->
-                  <!--:items="persons"-->
+                  <!--:items="employers"-->
                   <!--label="Person"-->
                 <!--&gt;</v-select>-->
+
+                <!--<cool-select-->
+                  <!--v-model="editedItem.employer"-->
+                  <!--:items="employers"-->
+                  <!--:key="employers.id"-->
+                  <!---->
+                  <!--item-text="fullname"-->
+                  <!--item-value="id"-->
+                <!--/>-->
+
                 <cool-select
-                  v-model="selected"
-                  :items="persons"
+                v-model="editedItem.fullname"
+                :items="employers"
+                :key="employers.id"
+                item-text="fullname"
+                item-value="id"
+                @select="onSelected"
                 />
+
               </v-flex>
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.date_of" label="Дата" type="date"></v-text-field>
@@ -54,7 +69,8 @@
       </v-card>
     </v-dialog>
       {{editedItem}}
-    {{persons}}
+      <br>
+    {{employers}}
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -82,7 +98,7 @@
 
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.person }}</td>
+        <td class="text-xs-center">{{ props.item.fullname }}</td>
         <td class="text-xs-center">{{ props.item.date_of }}</td>
         <td class="text-xs-center">{{ props.item.overtime }}</td>
         <td class="text-xs-center">{{ props.item.lesstime }}</td>
@@ -121,7 +137,7 @@
       search: '',
       dialog: false,
       headers: [
-        { text: 'Работник', value: 'person', align: 'center' },
+        { text: 'Работник', value: 'fullname', align: 'center' },
         { text: 'Дата', value: 'date_of', align: 'center' },
         { text: 'Переработки', value: 'overtime', align: 'center' },
         { text: 'Недоработки', value: 'lesstime', align: 'center' },
@@ -131,27 +147,35 @@
         { text: 'Действия', value: 'name', sortable: false, align: 'center' }
       ],
       info: [],
-      persons: [],
-      selected:null,
+      employers: [],
+      selected:1,
       errors:[],
       editedIndex: -1,
       editedItem: {
-        person: '',
+        fullname:'',
+        // employer: {
+        //   // id:'',
+        //   // fullname:''
+        // },
         date_of: '',
         overtime: '',
         lesstime: '',
         seakleave: '',
         time_off: '',
-        vacaton: ''
+        vacation: ''
       },
       defaultItem: {
-        person: '',
+        // employer: {
+        //   // id:'',
+        //   // fullname:''
+        // },
+        fullname:'',
         date_of: '',
         overtime: 0,
         lesstime: 0,
         seakleave: 0,
         time_off: 0,
-        vacaton: 0,
+        vacation: 0,
       }
     }),
 
@@ -172,11 +196,21 @@
     },
 
     methods: {
+
+      onSelected(obj) {
+        console.log(obj);
+        this.editItem.employer=obj;
+        // console.log(this.selected);
+
+        console.log(this.editedItem);
+      },
+
+
       initialize() {
-        this.persons = [
-          AXIOS.get(`/employers/lastname`)
+        this.employers = [
+          AXIOS.get(`/employers/full`)
             .then(response => {
-              this.persons = response.data
+              this.employers = response.data
             })
             .catch(e => {
               this.errors.push(e)

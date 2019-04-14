@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Новый работник</v-btn>
+      <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Новый сотрудник</v-btn>
 
       <v-card>
         <v-card-title>
@@ -34,8 +34,8 @@
       </v-card>
 
     </v-dialog>
-    {{editedItem}}
-
+    <!--{{editedItem}}-->
+    <v-footer class="tabel_name">Сотрудники</v-footer>
     <v-data-table
       :headers="headers"
       :items="employers"
@@ -46,7 +46,7 @@
         <td class="text-xs-center">{{ props.item.lastname }}</td>
         <td class="text-xs-center">{{ props.item.firstname }}</td>
         <td class="text-xs-center">{{ props.item.patronic }}</td>
-        <td class="text-xs-center">{{ props.item.birthday }}</td>
+        <td class="text-xs-center">{{ props.item.birthday}}</td>
         <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -212,6 +212,10 @@
 <style scoped>
   v-data-table {
     width: 100%;
+  }
+  .tabel_name {
+    font-size: 30px;
+    /*font-family: ;*/
   }
 
 </style>

@@ -41,7 +41,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      {{editedItem}}
+      <!--{{editedItem}}-->
       <!--Переделать эту дичь-->
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>

@@ -3,7 +3,7 @@
     <v-flex row>
 
       <!--<span class="title"> По состоянию на: {{}}</span>-->
-      <span class="title" @click="callRestService()"> По состоянию на: {{ response }}</span>
+      <span class="title" @click="callRestService()"> По состоянию на: {{ today }}</span>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -21,7 +21,7 @@
       ></v-text-field>
     </v-flex>
 
-    <v-footer class="tabel_name">Full information</v-footer>
+    <v-footer class="tabel_name">Сводная информация</v-footer>
 
     <v-data-table
       :headers="headers"
@@ -52,13 +52,15 @@
   import  {AXIOS} from "../plugins/APIService.js"
   export default {
     data: () => ({
+      // message: new Date().toLocaleString(),
+      today: new Date().toLocaleDateString(),
       response:[],
       search: '',
       dialog: false,
       headers: [
-        { text: 'Date', value: 'date_of', align: 'center' },
-        { text: 'Name', value: 'name', align: 'center' },
-        { text: 'Full Information', value: 'full_info', align: 'center' },
+        { text: 'Дата', value: 'date_of', align: 'center' },
+        { text: 'Событие', value: 'name', align: 'center' },
+        { text: 'Полная информация', value: 'full_info', align: 'center' },
       ],
       info: [],
       editedIndex: -1,
@@ -70,16 +72,20 @@
         val || this.close()
       }
     },
+    created () {
+      this.initialize()
+    },
     methods: {
-      callRestService () {
-        AXIOS.get(`/testREST/test`)
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.response = response.data
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
+      initialize(){
+        this.info = [
+          AXIOS.get(`/fullEvents`)
+            .then(response => {
+              this.info = response.data
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        ]
       }
     },
   }

@@ -9,7 +9,6 @@ import Tabel from "../components/pages/Tabel";
 import Events from "../components/pages/Events";
 import TestREST from "../components/pages/TestREST";
 
-
 Vue.use(VueRouter);
 
 const routes = [
