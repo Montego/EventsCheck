@@ -112,7 +112,6 @@
       this.initialize()
     },
 
-
     methods: {
       initialize () {
         this.employers = [
@@ -178,15 +177,6 @@
         } else {
           // this.employers.push(this.editedItem)
 
-          // AXIOS.post(`/employers`, this.editedItem)
-          //   .then(response => {
-          //   this.employers.push(this.editedItem)
-          // })
-          //   .catch(e => {
-          //     console.log(e)
-          //     this.errors.push(e);
-          //   })
-
           AXIOS.post(`/employers`, this.editedItem)
             .then(response => {
 
@@ -201,18 +191,6 @@
               this.error=true;
               console.log(e)
             })
-
-          // AXIOS.post(`/employers`, this.editedItem)
-          //   .then(response => {
-          //     if(response.data.isSuccess = true){
-          //       this.employers.editedItem;
-          //       console.log(response.data.message);
-          //       console.log(response.data.isSuccess);
-          //       console.log(response.data);
-          //     }else{
-          //       this.errors.push(e);
-          //     }
-          //   })
 
         }
         this.close();
