@@ -4,7 +4,7 @@
       <ul class="navbar-nav justify-content-center">
 
         <li class="nav-link main">
-          <router-link :to="{name: 'main'}" v-bind:title="message">
+          <router-link :to="{name: 'main'}" v-bind:title="titles[0].title">
             <!--<a href="" class="fas fa-home main_icon" ></a>-->
             <template v-if="'main'.indexOf($route.name)>-1">
               <a href="" class="fas fa-home main_icon"></a>
@@ -19,7 +19,7 @@
 
         <li class="nav-link employers">
           <!--<a href="" class="far fa-user"></a>-->
-          <router-link :to="{name: 'employers'}" v-bind:title="message">
+          <router-link :to="{name: 'employers'}" v-bind:title="titles[1].title">
             <!--<a href="" class="fas fa-users"></a>-->
             <template v-if="'employers'.indexOf($route.name)>-1">
               <a href="" class="fas fa-user-plus employer_icon"></a>
@@ -31,7 +31,7 @@
         </li>
         <!--<div class="vl"></div>-->
         <li class="nav-link events">
-          <router-link :to="{name: 'events'}" v-bind:title="message">
+          <router-link :to="{name: 'events'}" v-bind:title="titles[2].title">
           <!--<a href="" class="fas fa-theater-masks"></a>-->
             <template v-if="'events'.indexOf($route.name)>-1">
               <a href="" class="fas fa-theater-masks events_icon"></a>
@@ -43,7 +43,7 @@
         </li>
         <!--<div class="vl"></div>-->
         <li class="nav-link tabel">
-          <router-link :to="{name: 'tabel'}" v-bind:title="message">
+          <router-link :to="{name: 'tabel'}" v-bind:title="titles[3].title">
           <!--<a href="" class="fas fa-user-clock"></a>-->
             <template v-if="'tabel'.indexOf($route.name)>-1">
               <a href="" class="fas fa-user-clock tabel_icon"></a>
@@ -55,7 +55,7 @@
         </li>
 
         <li class="nav-link calendar">
-          <router-link :to="{name: 'calendar'}" v-bind:title="message">
+          <router-link :to="{name: 'calendar'}" v-bind:title="titles[4].title">
             <!--<a href="" class="far fa-calendar-alt"></a>-->
             <template v-if="'calendar'.indexOf($route.name)>-1">
               <a href="" class="far fa-calendar-alt calendar_icon"></a>
@@ -88,7 +88,23 @@
         name: "Header",
         data: function () {
         return {
-          message: 'надо доделать эту фигню'
+          titles:[
+            {
+              title: 'Главная страница'
+            },
+            {
+              title: 'Сотрудники'
+            },
+            {
+              title: 'События'
+            },
+            {
+              title: 'Табель'
+            },
+            {
+              title: 'Календарь'
+            }
+          ]
         }
       },
       computed:{

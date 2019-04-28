@@ -23,12 +23,21 @@
                   <!--<v-text-field v-model="editedItem.full_info" label="Полная информация" maxlength="77"></v-text-field>-->
                   <v-textarea
                     v-model="editedItem.full_info"
-                    label="Full information"
+                    label="Полная информация"
                     counter
                     maxlength="360"
                     full-width
                     single-line
                   ></v-textarea>
+                </v-flex>
+                <v-flex xs12 sm6 md3 v-show="false">
+                  <v-checkbox
+                    class="justify-center"
+                    v-model="editedItem.done"
+                    color="green"
+                    hide-details
+                  >
+                  </v-checkbox>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -41,7 +50,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!--{{editedItem}}-->
+      <!--{{info}}-->
       <!--Переделать эту дичь-->
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -60,6 +69,8 @@
       ></v-text-field>
     </v-flex>
 
+    <!--{{done.toString()}}-->
+
     <v-footer class="tabel_name">События</v-footer>
 
     <v-data-table
@@ -68,20 +79,27 @@
       :search="search"
       hide-actions
       class="elevation-1 text-xs-center"
-
-
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.date_of }}</td>
         <td class="text-xs-center">{{ props.item.name }}</td>
         <td class="text-xs-center">{{ props.item.full_info }}</td>
         <td class="justify-center layout px-0">
-          <!--<v-btn icon class="mx-0" @click="editItem(props.item)">-->
-            <!--<v-icon color="#5bc0de">edit</v-icon>-->
-          <!--</v-btn>-->
+          <v-btn icon class="mx-0" @click="editItem(props.item)">
+            <v-icon color="#5bc0de">edit</v-icon>
+          </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
             <v-icon color="red">delete</v-icon>
           </v-btn>
+        </td>
+        <td>
+          <v-checkbox
+          class="justify-center"
+          v-model="editedItem.done"
+          color="green"
+          hide-details
+          >
+          </v-checkbox>
         </td>
       </template>
 
@@ -108,8 +126,10 @@
         { text: 'Дата события', value: 'date_of', align: 'center' },
         { text: 'Название', value: 'name', align: 'center' },
         { text: 'Полная информация', value: 'full_info', align: 'center' },
-        { text: 'Действия', value: 'name', sortable: false, align: 'center' }
+        { text: 'Действия', value: 'action', sortable: false, align: 'center' },
+        { text: 'Выполнено', value: 'done', sortable: false, align: 'center' },
       ],
+      done: '',
       info: [],
       response:[],
       errors:[],
@@ -118,17 +138,19 @@
         date_of: '',
         name: '',
         full_info: '',
+        done: false
       },
       defaultItem: {
         date_of: '',
         name: '',
         full_info: '',
+        done: false
       }
     }),
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New event' : 'Edit event'
+        return this.editedIndex === -1 ? 'Новое событие' : 'Редактировать событие'
       }
     },
 
@@ -161,6 +183,26 @@
         this.dialog = true
       },
 
+      // doneEvent(item) {
+      //   this.editedIndex = this.info.indexOf(item)
+      //   this.editedItem = Object.assign({}, item)
+      //
+      //   const index = this.info.indexOf(item);
+      //   const idString = this.info[index].id;
+      //   const id = parseInt(idString,10);
+      //   AXIOS.put('events/' + id +'/done',{
+      //     params:
+      //       {
+      //         id:id
+      //       }
+      //   }).then(response => {
+      //     this.info.splice(index, 1);
+      //   })
+      //     .catch(e => {
+      //       this.errors.push(e)
+      //     })
+      // },
+
       deleteItem(item) {
         const index = this.info.indexOf(item);
         const idString = this.info[index].id;
@@ -176,25 +218,24 @@
           .catch(e => {
             this.errors.push(e)
           });
-        // this.info.splice(index, 1);
 
       },
 
       close() {
         this.dialog = false
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1
         }, 300)
       },
 
       save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.info[this.editedIndex], this.editedItem)
+           m
+
         } else {
           AXIOS.post(`/events`,this.editedItem)
             .then(response => {
-              // JSON responses are automatically parsed.
               this.info.push(response.data)
             })
             .catch(e => {

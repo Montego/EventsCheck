@@ -6,7 +6,7 @@
       <v-btn slot="activator" color="#5bc0de" dark class="mb-2">Новая информация для табеля</v-btn>
       <v-card>
         <v-card-title>
-          <span class="headline">New info</span>
+          <span class="headline">{{formTitle}}</span>
         </v-card-title>
 
         <v-card-text>
@@ -106,9 +106,9 @@
         <td class="text-xs-center">{{ props.item.time_off }}</td>
         <td class="text-xs-center">{{ props.item.vacation }}</td>
         <td class="justify-center layout px-0">
-          <!--<v-btn icon class="mx-0" @click="editItem(props.item)">-->
-            <!--<v-icon color="teal">edit</v-icon>-->
-          <!--</v-btn>-->
+          <v-btn icon class="mx-0" @click="editItem(props.item)">
+            <v-icon color="#5bc0de">edit</v-icon>
+          </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
             <v-icon color="red">delete</v-icon>
           </v-btn>
@@ -139,11 +139,11 @@
       headers: [
         { text: 'Работник', value: 'fullname', align: 'center' },
         { text: 'Дата', value: 'date_of', align: 'center' },
-        { text: 'Переработки', value: 'overtime', align: 'center' },
-        { text: 'Недоработки', value: 'lesstime', align: 'center' },
-        { text: 'Больничный', value: 'seakleave', align: 'center' },
-        { text: 'Отгул', value: 'time_off', align: 'center' },
-        { text: 'Отпуск', value: 'vacation', align: 'center' },
+        { text: 'Переработки, часы', value: 'overtime', align: 'center' },
+        { text: 'Недоработки, часы', value: 'lesstime', align: 'center' },
+        { text: 'Больничный, дни', value: 'seakleave', align: 'center' },
+        { text: 'Отгул, дни', value: 'time_off', align: 'center' },
+        { text: 'Отпуск, дни', value: 'vacation', align: 'center' },
         { text: 'Действия', value: 'name', sortable: false, align: 'center' }
       ],
       info: [],
@@ -153,10 +153,6 @@
       editedIndex: -1,
       editedItem: {
         fullname:'',
-        // employer: {
-        //   // id:'',
-        //   // fullname:''
-        // },
         date_of: '',
         overtime: '',
         lesstime: '',
@@ -165,10 +161,6 @@
         vacation: ''
       },
       defaultItem: {
-        // employer: {
-        //   // id:'',
-        //   // fullname:''
-        // },
         fullname:'',
         date_of: '',
         overtime: 0,
@@ -181,7 +173,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New tabel info' : 'Edit tabel info'
+        return this.editedIndex === -1 ? 'Новая информация в табель' : 'Редактировать информацию в табеле'
       }
     },
 
@@ -260,22 +252,22 @@
 
       save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.info[this.editedIndex], this.editedItem)
+          Object.assign(this.info[this.editedIndex], this.editedItem);
+          //TODO реактивное отображение сотрудника
+
+
           const idString = this.info[this.editedIndex].id;
           const id = parseInt(idString,10);
-          AXIOS.put(`/tabel/` + id,this.editedItem)
+
+          AXIOS.put(`/tabel/` + id, this.editedItem)
             .then(response => {
-              // JSON responses are automatically parsed.
-              this.info.push(response.data)
             })
             .catch(e => {
               this.errors.push(e)
             })
-
         } else {
           AXIOS.post(`/tabel`,this.editedItem)
             .then(response => {
-              // JSON responses are automatically parsed.
               this.info.push(response.data)
             })
             .catch(e => {
