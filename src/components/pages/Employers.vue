@@ -48,11 +48,11 @@
         <td class="text-xs-center">{{ props.item.patronic }}</td>
         <td class="text-xs-center">{{ props.item.birthday}}</td>
         <td class="justify-center layout px-0">
-          <!--<v-btn icon class="mx-0" @click="editItem(props.item)">-->
-            <!--<v-icon color="teal">edit</v-icon>-->
-          <!--</v-btn>-->
+          <v-btn icon class="mx-0" @click="editItem(props.item)">
+            <v-icon color="#5bc0de">edit</v-icon>
+          </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+            <v-icon color="red">delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -75,7 +75,7 @@
         { text: 'Имя', value: 'firstтame', align: 'center' },
         { text: 'Отчество', value: 'patronic', align: 'center' },
         { text: 'Дата рождения', value: 'birthday', align: 'center' },
-        { text: 'Actions', value: 'name', sortable: false, align: 'center' }
+        { text: 'Действия', value: 'name', sortable: false, align: 'center' }
       ],
       employers: [],
       response:[],
@@ -98,7 +98,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New employer' : 'Edit employer'
+        return this.editedIndex === -1 ? 'Новый сотрудник' : 'Редактировать информацию о новом сотруднике'
       }
     },
 
@@ -111,6 +111,7 @@
     created () {
       this.initialize()
     },
+
 
     methods: {
       initialize () {
@@ -126,24 +127,9 @@
       },
 
       editItem (item) {
-        const index = this.employers.indexOf(item);
-        const idString = this.employers[index].id;
-        const id = parseInt(idString,10);
-        AXIOS.put('employers/' + id,{
-          params:
-            {
-              id:id
-            }
-        }).then(response => {
-          this.employers[index].push(response.data);
-          // this.editedIndex = this.employers.indexOf(item)
-          // this.editedItem = Object.assign({}, item)
-          this.dialog = true
-        })
-          .catch(e => {
-            this.errors.push(e)
-          });
-
+        this.editedIndex = this.employers.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
       },
 
       deleteItem (item) {
@@ -173,10 +159,17 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.employers[this.editedIndex], this.editedItem)
-        } else {
-          // this.employers.push(this.editedItem)
+          Object.assign(this.employers[this.editedIndex], this.editedItem);
+          const idString = this.employers[this.editedIndex].id;
+          const id = parseInt(idString,10);
+          AXIOS.put(`/employers/` + id, this.editedItem)
+            .then(response => {
 
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        } else {
           AXIOS.post(`/employers`, this.editedItem)
             .then(response => {
 
@@ -191,6 +184,18 @@
               this.error=true;
               console.log(e)
             })
+
+          // AXIOS.post(`/employers`, this.editedItem)
+          //   .then(response => {
+          //     if(response.data.isSuccess = true){
+          //       this.employers.editedItem;
+          //       console.log(response.data.message);
+          //       console.log(response.data.isSuccess);
+          //       console.log(response.data);
+          //     }else{
+          //       this.errors.push(e);
+          //     }
+          //   })
 
         }
         this.close();
