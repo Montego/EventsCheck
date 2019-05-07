@@ -164,7 +164,6 @@
           const id = parseInt(idString,10);
           AXIOS.put(`/employers/` + id, this.editedItem)
             .then(response => {
-
             })
             .catch(e => {
               this.errors.push(e)

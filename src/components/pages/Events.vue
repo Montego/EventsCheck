@@ -30,15 +30,16 @@
                     single-line
                   ></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm6 md3 v-show="false">
-                  <v-checkbox
-                    class="justify-center"
-                    v-model="editedItem.done"
-                    color="green"
-                    hide-details
-                  >
-                  </v-checkbox>
-                </v-flex>
+
+                <!--<v-flex xs12 sm6 md3 v-show="false">-->
+                  <!--<v-checkbox-->
+                    <!--class="justify-center"-->
+                    <!--v-model="editedItem.is_done"-->
+                    <!--color="green"-->
+                    <!--hide-details-->
+                  <!--&gt;-->
+                  <!--</v-checkbox>-->
+                <!--</v-flex>-->
               </v-layout>
             </v-container>
           </v-card-text>
@@ -51,7 +52,7 @@
         </v-card>
       </v-dialog>
       <!--{{info}}-->
-      <!--Переделать эту дичь-->
+      <!--TODO Переделать эту дичь-->
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -63,13 +64,20 @@
         class="search_place"
         v-model="search"
         append-icon="search"
-        label="Search"
+        label="Поиск"
         single-line
         hide-details
       ></v-text-field>
     </v-flex>
 
-    <!--{{done.toString()}}-->
+    <!--{{editedItem.is_done}}-->
+    ////
+    <!--{{info[0]._done}}-->
+    <!--{{info[1]._done}}-->
+    <!--{{info[2]._done}}-->
+    <!--{{info[3]._done}}-->
+    \\\
+
 
     <v-footer class="tabel_name">События</v-footer>
 
@@ -93,20 +101,27 @@
           </v-btn>
         </td>
         <td>
-          <v-checkbox
-          class="justify-center"
-          v-model="editedItem.done"
-          color="green"
-          hide-details
-          >
-          </v-checkbox>
+
+          <v-btn v-model="props.item._done" icon class="mx-0" @click="isDone(props.item)">
+            <v-icon :color="props.item._done ? 'green' : '#DEDEDE'" class="far fa-check-circle is_done_icon_true"></v-icon>
+          </v-btn>
+
+          <!--<template v-if="props.item._done===true">-->
+            <!--<v-btn v-model="props.item._done" icon class="mx-0" @click="isDone(props.item)">-->
+            <!--<v-icon class="far fa-check-circle is_done_icon_true" color="green"></v-icon>-->
+            <!--</v-btn>-->
+          <!--</template>-->
+          <!--<template v-else>-->
+            <!--<v-btn v-model="props.item._done" icon class="mx-0" @click="isDone(props.item)">-->
+            <!--<v-icon class="far fa-check-circle is_done_icon_false" color="#DEDEDE"></v-icon>-->
+            <!--</v-btn>-->
+          <!--</template>-->
         </td>
       </template>
 
       <v-alert v-slot:no-results :value="true" color="error" icon="warning">
         Your search for "{{ search }}" found no results.
       </v-alert>
-
 
       <template slot="no-data">
         <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -127,9 +142,9 @@
         { text: 'Название', value: 'name', align: 'center' },
         { text: 'Полная информация', value: 'full_info', align: 'center' },
         { text: 'Действия', value: 'action', sortable: false, align: 'center' },
-        { text: 'Выполнено', value: 'done', sortable: false, align: 'center' },
+        { text: 'Выполнено', value: '_done', sortable: false, align: 'center' },
       ],
-      done: '',
+      // status: false,
       info: [],
       response:[],
       errors:[],
@@ -138,13 +153,12 @@
         date_of: '',
         name: '',
         full_info: '',
-        done: false
+        is_done:false
       },
       defaultItem: {
         date_of: '',
         name: '',
         full_info: '',
-        done: false
       }
     }),
 
@@ -178,30 +192,51 @@
       },
 
       editItem(item) {
-        this.editedIndex = this.info.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+        this.editedIndex = this.info.indexOf(item);
+        this.editedItem = Object.assign({}, item);
         this.dialog = true
       },
 
-      // doneEvent(item) {
-      //   this.editedIndex = this.info.indexOf(item)
-      //   this.editedItem = Object.assign({}, item)
-      //
-      //   const index = this.info.indexOf(item);
-      //   const idString = this.info[index].id;
-      //   const id = parseInt(idString,10);
-      //   AXIOS.put('events/' + id +'/done',{
-      //     params:
-      //       {
-      //         id:id
-      //       }
-      //   }).then(response => {
-      //     this.info.splice(index, 1);
-      //   })
-      //     .catch(e => {
-      //       this.errors.push(e)
-      //     })
-      // },
+      isDone(item){
+        const index = this.info.indexOf(item);
+        const idString = this.info[index].id;
+        const id = parseInt(idString,10);
+
+          if(this.info[index]._done===false){
+            this.info[index]._done=true
+
+            AXIOS.put(`/events/` + id + '/' +  true, {
+                params:
+                  {
+                    id:id,
+                    is_done: true
+                  }
+              })
+                .then(response => {
+                  // this.editedItem.done=response.data;
+                })
+                .catch(e => {
+                  this.errors.push(e)
+                })
+          }else{
+            this.info[index]._done=false
+
+            AXIOS.put(`/events/` + id + '/' + false, {
+                params:
+                  {
+                    id:id,
+                    is_done: false
+                  }
+              })
+                .then(response => {
+                  // this.editedItem.done=response.data;
+                })
+                .catch(e => {
+                  this.errors.push(e)
+                })
+          }
+
+      },
 
       deleteItem(item) {
         const index = this.info.indexOf(item);
@@ -231,7 +266,15 @@
 
       save() {
         if (this.editedIndex > -1) {
-           m
+          Object.assign(this.info[this.editedIndex], this.editedItem);
+          const idString = this.info[this.editedIndex].id;
+          const id = parseInt(idString,10);
+          AXIOS.put(`/events/` + id, this.editedItem)
+            .then(response => {
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
 
         } else {
           AXIOS.post(`/events`,this.editedItem)
@@ -250,6 +293,14 @@
 </script>
 
 <style scoped>
+
+  /*.is_done_icon_true {*/
+    /*color: green;*/
+  /*}*/
+  /*.is_done_icon_false {*/
+    /*color: #DEDEDE;*/
+  /*}*/
+
   .search_place {
     padding-bottom: 20px;
   }

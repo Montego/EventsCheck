@@ -82,7 +82,7 @@
         class="search_place"
         v-model="search"
         append-icon="search"
-        label="Search"
+        label="Поиск"
         single-line
         hide-details
       ></v-text-field>
@@ -251,16 +251,18 @@
       },
 
       save() {
+
         if (this.editedIndex > -1) {
           Object.assign(this.info[this.editedIndex], this.editedItem);
           //TODO реактивное отображение сотрудника
-
 
           const idString = this.info[this.editedIndex].id;
           const id = parseInt(idString,10);
 
           AXIOS.put(`/tabel/` + id, this.editedItem)
             .then(response => {
+              // Object.assign(this.info[this.editedIndex], response.data);
+              // this.info.push(response.data)
             })
             .catch(e => {
               this.errors.push(e)
